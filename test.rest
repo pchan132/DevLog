@@ -1,0 +1,18 @@
+### SIGN UP 
+POST http://localhost:3000/api/auth/signup
+Content-Type: application/json
+
+{
+    "name":"Nattapol",
+    "email":"ex@gmail.com",
+    "password":"123456"
+}
+
+### SIGN IN
+POST  http://localhost:3000/api/auth/signin
+
+{
+    "name":"Nattapol",
+    "email":"ex@gmail.com",
+    "password":"123456"
+}

@@ -1,0 +1,50 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+        
+
+model User {
+  id        String  @id @default(cuid())
+  name      String?
+  email     String? @unique
+  password  String
+  projects  Project[]
+  createdAt DateTime @default(now())
+}
+
+model Project {
+  id        String  @id @default(cuid())
+  title     String
+  description String?
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String
+  systems   System[]
+  createdAt DateTime @default(now())
+}
+
+model System {
+  id        String  @id @default(cuid())
+  title     String
+  description String?
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId String
+  notes     Note[]
+  flowData  Json?
+  createdAt DateTime @default(now())
+}
+
+model Note {
+  id        String  @id @default(cuid())
+  content   String
+  type      String  // "problem" | "solution" | "learning"
+  system    System  @relation(fields: [systemId], references: [id])
+  systemId  String
+  createdAt DateTime @default(now())
+}
