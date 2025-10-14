@@ -1,10 +1,12 @@
 "use client";
 
 import AuthForm from "@/app/components/AuthForm";
+import { useRouter } from "next/navigation";
 
-export default function page() {
+export default function SignUp() {
   const localApi = "http://localhost:3000/";
   const baseApi = "api/auth/signup";
+  const router = useRouter();
 
   const handleSignUp = (data: any) => {
     fetch(localApi + baseApi, {
@@ -13,6 +15,10 @@ export default function page() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
+    }).then((res) => {
+      if (res.ok) {
+        router.push("/profile");
+      }
     });
   };
 

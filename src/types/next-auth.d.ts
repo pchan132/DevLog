@@ -1,4 +1,5 @@
 import NextAuth, { DefaultSession } from "next-auth";
+import Google from "next-auth/providers/google";
 
 declare module "next-auth" {
   interface Session {
@@ -15,5 +16,14 @@ declare module "next-auth" {
 declare module "next-auth/jwt" {
   interface JWT {
     id: string;
+  }
+}
+
+declare module "GoogleProvider" {
+  interface Profile {
+    sub: string;
+    name: string;
+    email: string;
+    picture: string;
   }
 }

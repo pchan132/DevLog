@@ -1,5 +1,7 @@
 "use client";
+import { signIn } from "next-auth/react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 // กำหนด ว่าเป็น sinIn | signUp
 type AuthType = "signIn" | "signUp";
@@ -22,6 +24,8 @@ export default function AuthForm({ type, onSubmit }: AuthFormProps) {
     password: "",
   });
 
+  const router = useRouter();
+
   // เก็บ Error เมื่อ ข้อมูลขาด
   const [error, setError] = useState("");
 
@@ -37,18 +41,6 @@ export default function AuthForm({ type, onSubmit }: AuthFormProps) {
   // เมื่อกด submit
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault(); // ไม่ให้ reload หน้า  เพจ
-
-    // ตรวจสอบเบื้องต้น
-    if (!formData.email || !formData.password) {
-      setError("กรุณากรอก Email และ Password");
-      return;
-    }
-
-    // เช็คข้อมูล ชื่อ และ signUp
-    if (!formData.name && type == "signUp") {
-      setError("กรุณา กรอกชื่อ");
-      return;
-    }
 
     setError("");
     onSubmit(formData); // ส่ง Data ออกไปให้ ผ่าน onSubmit
@@ -98,9 +90,32 @@ export default function AuthForm({ type, onSubmit }: AuthFormProps) {
         />
       </div>
 
-      <button type="submit" className="border p-2 ">
+      <button type="submit" className="border p-2 cursor-pointer">
         {type == "signIn" ? "เข้าสู่ระบบ" : "สมัครสมาชิก"}
       </button>
+      {error && <p className="text-red-500">{error}</p>}
+
+      {/* เข้าสู่ระบบด้วย Google */}
+      <div className="flex justify-center mt-4">
+        <button
+          className="flex cursor-pointer"
+          onClick={() => signIn("google", { callbackUrl: "/profile" })}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={24}
+            height={24}
+            fill={"currentColor"}
+            viewBox="0 0 24 24"
+          >
+            {/* Boxicons v3.0 https://boxicons.com | License  https://docs.boxicons.com/free */}
+            <path d="M20.283 10.356h-8.327v3.451h4.792c-.446 2.193-2.313 3.453-4.792 3.453a5.27 5.27 0 0 1-5.279-5.28 5.27 5.27 0 0 1 5.279-5.279c1.259 0 2.397.447 3.29 1.178l2.6-2.599c-1.584-1.381-3.615-2.233-5.89-2.233a8.91 8.91 0 0 0-8.934 8.934 8.907 8.907 0 0 0 8.934 8.934c4.467 0 8.529-3.249 8.529-8.934 0-.528-.081-1.097-.202-1.625"></path>
+          </svg>
+          {type == "signIn"
+            ? "เข้าสู่ระบบด้วย Google"
+            : "สมัครสมาชิกด้วย Google"}
+        </button>
+      </div>
     </form>
   );
 }

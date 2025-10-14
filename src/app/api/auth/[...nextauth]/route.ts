@@ -3,8 +3,19 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { PrismaAdapter } from "@auth/prisma-adapter";
+import GoogleProvider from "next-auth/providers/google";
+import { redirect } from "next/dist/server/api-utils";
 
 const prisma = new PrismaClient();
+
+//////////////////////// Google Provider //////////////////////////////////
+const googleClientId = process.env.GOOGLE_CLIENT_ID;
+const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
+
+if (!googleClientId || !googleClientSecret) {
+  throw new Error("Missing GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET");
+}
+//////////////////////////////////////////////////////////////////////////
 
 const handler = NextAuth({
   providers: [
@@ -22,26 +33,50 @@ const handler = NextAuth({
       async authorize(credentials) {
         // ตัวสอบข้อมูล ----------------------------------------------
         if (!credentials) return null;
-        // ค้นหาผู้ใช้ในฐานข้อมูล
+        // 1. ค้นหาผู้ใช้ในฐานข้อมูล
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
 
-        // ตัวสอบข้อมูล กับ รหัส --------------------------------------
-        if (
-          user &&
-          (await bcrypt.compare(credentials.password, user.password))
-        ) {
-          return {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-          };
-        } else {
+        // 2. ตรวจสอบก่อนว่า user ที่หาเจอ "มีรหัสผ่านหรือไม่"
+        // ถ้าไม่มี user หรือ user ไม่มี password (ซึ่งหมายความว่าสมัครมาจาก Google)
+        // ให้บอกว่าข้อมูลไม่ถูกต้องทันที โดยไม่ต้องไปเช็ค bcrypt
+        if (!user || !user.password) {
           throw new Error("Invalid credentials");
         }
+
+        // 3. ถ้า user มีรหัสผ่าน ถึงจะนำมาเปรียบเทียบ
+        const isPasswordValid = await bcrypt.compare(
+          credentials.password,
+          user.password // ณ จุดนี้ เรามั่นใจได้ว่า user.password ไม่ใช่ null
+        );
+
+        if (!isPasswordValid) {
+          throw new Error("Invalid credentials");
+        }
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+        };
       },
     }),
+    //----------------------------------------------------------
+    ///--------------- Google ----------------------------------
+    GoogleProvider({
+      clientId: googleClientId,
+      clientSecret: googleClientSecret,
+      profile(profile) {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+        };
+      },
+    }),
+    //----------------------------------------------------------
   ],
   /////////////////////////////////////////////////////////////////////////////////
   adapter: PrismaAdapter(prisma),
@@ -60,6 +95,7 @@ const handler = NextAuth({
     session: async ({ session, token }) => {
       if (token) {
         session.user.id = token.id;
+        session.user.image = token.picture;
       }
       return session;
     },
