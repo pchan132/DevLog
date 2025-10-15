@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import AuthForm from "@/app/components/AuthForm";
 import { signIn } from "next-auth/react";
-import { sign } from "crypto";
 
 export default function SignIn() {
   const router = useRouter();
@@ -19,9 +18,8 @@ export default function SignIn() {
       if (result?.error) {
         alert(result.error);
         return;
-      } else {
-        router.push("/profile");
       }
+      router.push("/profile");
     } catch (error) {
       console.log(error);
     }

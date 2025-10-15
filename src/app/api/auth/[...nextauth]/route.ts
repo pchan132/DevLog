@@ -1,12 +1,9 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import GoogleProvider from "next-auth/providers/google";
-import { redirect } from "next/dist/server/api-utils";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/prisma";
 
 //////////////////////// Google Provider //////////////////////////////////
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
