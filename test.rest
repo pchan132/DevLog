@@ -10,9 +10,106 @@ Content-Type: application/json
 
 ### SIGN IN
 POST  http://localhost:3000/api/auth/signin
+Content-Type: application/json
 
 {
     "name":"Nattapol",
     "email":"ex@gmail.com",
     "password":"123456"
 }
+
+
+#---------------------------------------------------------------
+#                     APIs projects
+### CREATE project 
+POST http://localhost:3000/api/projects
+
+{
+  "title": "Roblox Battle Game",
+  "description": "ระบบเกม Roblox ที่มีการจัดการผู้เล่นและทีม",
+  "userId": "cmgr0705x0000ttsk4m06evuq" 
+}
+
+### READ all projects
+GET http://localhost:3000/api/projects
+
+### READ one project
+GET http://localhost:3000/api/projects/cmgs55vx5000kttlo9hyjt2un
+
+### UPDATE one project
+PUT http://localhost:3000/api/projects/cmgs55vx5000kttlo9hyjt2un
+Content-Type: application/json
+
+{
+    "title" : "ทดสอบ update",
+    "description" : "ทดสอบ update"
+}
+
+### DELETE project id
+DELETE http://localhost:3000/api/projects/cmgs55vx5000kttlo9hyjt2un
+
+
+#---------------------------------------------------------------
+#                     APIs systems
+### CREATE systems
+POST http://localhost:3000/api/systems
+Content-Type: application/json
+
+{
+    "title" : "สี",
+    "description" : "Red blue",
+    "projectId" : "cmgs55vx5000kttlo9hyjt2un"
+}
+
+### READ all systems
+GET http://localhost:3000/api/systems
+
+### READ one systems
+GET http://localhost:3000/api/systems/cmgs5nshz0001tt40qdxxhbma
+
+### UPDATE systems
+PUT http://localhost:3000/api/systems/cmgs5nshz0001tt40qdxxhbma
+Content-Type: application/json
+
+{
+    "title" : "ทดสอบ update",
+    "description" : "ทดสอบ blue",
+    "flowData" : ""
+}
+
+### DELETE systems
+DELETE http://localhost:3000/api/systems/cmgs5nshz0001tt40qdxxhbma
+
+
+
+
+#---------------------------------------------------------------
+#                     APIs note
+### CREATE note
+POST http://localhost:3000/api/notes
+Content-Type: application/json
+
+{
+    "content": "ปัญหาในการเชื่อมต่อฐานข้อมูล",
+    "type": "problem",
+    "systemId": "cmgs57eid000mttlowt8f0mdq"
+}
+
+### READ all notes
+GET http://localhost:3000/api/notes
+
+### READ one note
+GET http://localhost:3000/api/notes/cmgs57eid000mttlowt8f0mdq
+
+### UPDATE note
+PUT http://localhost:3000/api/notes/cmgs8q9lb0009tti8tqwi2lij
+Content-Type: application/json
+
+{
+    "content": "แก้ไขปัญหาการเชื่อมต่อฐานข้อมูลเรียบร้อยแล้ว",
+    "type": "solution"
+}
+
+### DELETE note
+DELETE http://localhost:3000/api/notes/cmgs8mbzh0007tti8heiau4st
+

@@ -9,16 +9,41 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
         
-
 model User {
   id        String  @id @default(cuid())
   name      String?
   email     String? @unique
-  password  String
+  password  String?
+  image     String?
+  emailVerified DateTime? // Google
+  accounts  Account[] //// เป็นตัวเชื่อมไปแต่ละ Providers
   projects  Project[]
   createdAt DateTime @default(now())
 }
 
+// Providers google, github, etc.
+// ✅ Replace your old Account model with this one
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String  // ใช้ 'type' แทน 'providerType'
+  provider           String
+  providerAccountId  String
+  refresh_token      String? @db.Text
+  access_token       String? @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String? @db.Text
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+// ข้อมูล ฟังก์ชั่น
 model Project {
   id        String  @id @default(cuid())
   title     String
@@ -48,3 +73,4 @@ model Note {
   systemId  String
   createdAt DateTime @default(now())
 }
+
