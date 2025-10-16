@@ -6,15 +6,26 @@ export async function GET(
   _: Request,
   { params }: { params: { systemId: string } }
 ) {
-  const system = await prisma.system.findUnique({
-    where: {
-      id: params.systemId,
-    },
-    include: {
-      notes: true,
-    },
-  });
-  return NextResponse.json(system);
+  try {
+    const system = await prisma.system.findUnique({
+      where: {
+        id: params.systemId,
+      },
+      include: {
+        notes: true,
+      },
+    });
+    return NextResponse.json(system);
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error: "Error to fetch One system",
+      },
+      {
+        status: 500,
+      }
+    );
+  }
 }
 
 // Update system
@@ -38,7 +49,7 @@ export async function PUT(
     return NextResponse.json(updatedSystem);
   } catch (error) {
     return NextResponse.json(
-      { error: "Something went wrong!", realError: error },
+      { error: "Error to Update system", detail: error },
       { status: 500 }
     );
   }
@@ -54,7 +65,7 @@ export async function DELETE(
     return NextResponse.json({ message: "System deleted" });
   } catch (error) {
     return NextResponse.json(
-      { error: "Something went wrong!", realError: error },
+      { error: "Error to Delete system", detail: error },
       { status: 500 }
     );
   }

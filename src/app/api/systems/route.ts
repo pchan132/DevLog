@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     return NextResponse.json(newSystem, { status: 201 });
   } catch (error) {
     return NextResponse.json(
-      { error: "Something went wrong!", realError: error },
+      { error: "Error Create System", detail: error },
       { status: 500 }
     );
   }
@@ -25,12 +25,24 @@ export async function POST(req: Request) {
 
 // READ all systems
 export async function GET() {
-  const systems = await prisma.system.findMany({
-    include: {
-      notes: true,
-      // project: true,
-    },
-  });
+  try {
+    const systems = await prisma.system.findMany({
+      include: {
+        notes: true,
+        // project: true,
+      },
+    });
 
-  return NextResponse.json(systems);
+    return NextResponse.json(systems, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error: "Error Get All systems",
+        detail: error,
+      },
+      {
+        status: 500,
+      }
+    );
+  }
 }
