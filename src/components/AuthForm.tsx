@@ -142,7 +142,7 @@ export default function AuthForm({
           <div className="flex justify-center mt-4">
             <button
               className="flex cursor-pointer bg-blue-400 w-full justify-center px-4 py-2 hover:bg-blue-800 rounded-2xl"
-              onClick={() => signIn("google", { callbackUrl: "/profile" })}
+              onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

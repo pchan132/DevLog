@@ -1,10 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import AuthForm from "@/app/components/AuthForm";
+import AuthForm from "@/components/AuthForm";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
-import { time } from "console";
 
 export default function SignIn() {
   const router = useRouter();
@@ -31,7 +30,7 @@ export default function SignIn() {
       }
 
       // ถ้า login สำเร็จ
-      router.push("/profile");
+      router.push("/dashboard");
     } catch (error) {
       console.error(error);
       setError("เกิดข้อผิดพลาด โปรดลองอีกครั้ง");

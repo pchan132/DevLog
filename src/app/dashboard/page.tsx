@@ -1,17 +1,54 @@
-"use client";
-import React from "react";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useSession, signOut } from "next-auth/react";
+// UI Card and icon
+import SummaryCard from "@/components/SummaryCard";
+import { Folder, Settings, StickyNote, CheckCircle } from "lucide-react";
+import { title } from "process";
 
-export default function Dashboard() {
-  const { data: session, status } = useSession(); // ใช้ ข้อมูลใน Session
-  const router = useRouter();
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/auth/signin"); // ไปหน้า signin
-    }
-  }, [status, router]);
+// ดึงข้อมูลจาก API stats เพื่อ นับ ผลรวม
+async function getStats() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/stats`, {
+    cache: "no-store", // เพื่อดึงข้อมูลใหม่ทุกครั้ง
+  });
+  return res.json();
+}
 
-  return <div>page</div>;
+export default async function Dashborad() {
+  const stats = await getStats(); // เอาฟังก์ชั่น เรียก API มากใช้
+
+  // ข้อมูลที่จะใส่ใน Card -------------------------------
+  const cards = [
+    {
+      title: "โปรเจคทั้งหมด",
+      value: stats.projects,
+      icon: <Folder className="text-blue-500" />,
+      color: "bg-blue-100",
+    },
+    {
+      title: "ฟีเจอร์ทั้งหมด",
+      value: stats.features,
+      icon: <Settings className="text-green-500" />,
+      color: "bg-green-100",
+    },
+    {
+      title: "โน้ตทั้งหมด",
+      value: stats.notes,
+      icon: <StickyNote className="text-yellow-500" />,
+      color: "bg-yellow-100",
+    },
+    {
+      title: "สำเร็จแล้ว",
+      value: stats.completed,
+      icon: <CheckCircle className="text-purple-500" />,
+      color: "bg-purple-100",
+    },
+  ];
+
+  return (
+    <div>
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        {cards.map((card) => (
+          <SummaryCard key={card.title} {...card} />
+        ))}
+      </div>
+    </div>
+  );
 }
