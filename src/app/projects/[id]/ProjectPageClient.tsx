@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 import TabProject from "@/components/TabProject";
 import CardSystems from "@/components/CardSystems";
 import CardNotes from "@/components/CardNotes";
@@ -32,6 +33,7 @@ interface ProjectPageClientProps {
 }
 
 const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("features");
 
   // รวบรวมโน้ตทั้งหมดจากระบบทั้งหมด
@@ -92,7 +94,11 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
         <div className="mt-6">
           {activeTab === "features" && (
             <>
-              <ButtonSystem projectId={project.id} />
+              {/* กดปุ่ม เพิ่มฟิเจอร์ และส่ง projectId ไป */}
+              <ButtonSystem
+                projectId={project.id}
+                onSystemCreated={() => router.refresh()}
+              />
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {project.systems.map((system) => (
                   <CardSystems key={system.id} system={system} />

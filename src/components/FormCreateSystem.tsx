@@ -5,13 +5,17 @@ import { useRouter } from "next/navigation";
 
 interface FormCreateSystemProps {
   projectId?: string;
+  onSuccess?: () => void;
 }
 
-export default function FormCreateSystem({ projectId }: FormCreateSystemProps) {
+export default function FormCreateSystem({
+  projectId,
+  onSuccess,
+}: FormCreateSystemProps) {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState("TODO");
 
   const [loading, setLoading] = useState(false);
 
@@ -43,16 +47,28 @@ export default function FormCreateSystem({ projectId }: FormCreateSystemProps) {
       });
 
       if (response.ok) {
-        alert("สร้างระบบเรียบร้อยแล้ว");
-        router.push(`/projects/${projectId}`);
-        router.refresh();
+        // เคลียร์ฟอร์ม
+        setTitle("");
+        setDescription("");
+        setStatus("TODO");
+
+        // เรียก callback ถ้ามี
+        if (onSuccess) {
+          onSuccess();
+        } else {
+          // ถ้าไม่มี callback ให้รีเฟรชหน้า (สำหรับกรณีใช้ในหน้า create)
+          router.refresh();
+        }
       } else {
-        router.push("/projects");
+        const errorData = await response.json().catch(() => ({}));
+        alert(
+          `เกิดข้อผิดพลาด: ${errorData.message || "ไม่สามารถสร้างระบบได้"}`
+        );
       }
     } catch (error) {
       alert(
         `เกิดข้อผิดพลาด: ${
-          error instanceof Error ? error.message : "ไม่สามารถบันทึกโปรเจคได้"
+          error instanceof Error ? error.message : "ไม่สามารถบันทึกระบบได้"
         }`
       );
     } finally {
@@ -78,13 +94,11 @@ export default function FormCreateSystem({ projectId }: FormCreateSystemProps) {
       {/* คำอธิบาย */}
       <div>
         <label className="block text-xl font-medium mb-1">คำอธิบาย</label>
-        <input
-          type="text"
+        <textarea
           id="title"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="w-full p-2 border rounded-md"
-          required
+          className="w-full p-2 border rounded-md h-50"
         />
       </div>
 
@@ -96,11 +110,17 @@ export default function FormCreateSystem({ projectId }: FormCreateSystemProps) {
           id="status"
           value={status}
           onChange={(e) => setStatus(e.target.value)}
-          className="w-full p-2 border rounded-md"
+          className="w-full p-2 border rounded-md "
         >
-          <option value="TODO">TODO</option>
-          <option value="DOING">DOING</option>
-          <option value="DONE">DONE</option>
+          <option value="TODO" className="bg-black text-white">
+            TODO
+          </option>
+          <option value="DOING" className="bg-black text-white">
+            DOING
+          </option>
+          <option value="DONE" className="bg-black text-white">
+            DONE
+          </option>
         </select>
       </div>
 
