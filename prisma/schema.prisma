@@ -59,6 +59,7 @@ model System {
   id        String  @id @default(cuid())
   title     String
   description String?
+  status    String // todo || Doing || DONE
   project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId String
   notes     Note[]

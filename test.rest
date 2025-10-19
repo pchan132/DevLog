@@ -58,7 +58,8 @@ Content-Type: application/json
 {
     "title" : "สี",
     "description" : "Red blue",
-    "projectId" : "cmgsa6a6y000btti85z1wvvyv"
+    "projectId" : "cmgsa6a6y000btti85z1wvvyv",
+    "status" : "TODO"
 }
 
 ### READ all systems

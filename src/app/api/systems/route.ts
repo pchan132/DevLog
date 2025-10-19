@@ -11,8 +11,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { title, description, projectId } = await req.json();
-    
+    const { title, description, projectId, status } = await req.json();
+
     // ตรวจสอบว่าผู้ใช้เป็นเจ้าของ project หรือไม่
     const project = await prisma.project.findFirst({
       where: {
@@ -22,7 +22,10 @@ export async function POST(req: Request) {
     });
 
     if (!project) {
-      return NextResponse.json({ error: "Project not found or access denied" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Project not found or access denied" },
+        { status: 404 }
+      );
     }
 
     const newSystem = await prisma.system.create({
@@ -30,6 +33,7 @@ export async function POST(req: Request) {
         title,
         description,
         projectId,
+        status,
       },
     });
 

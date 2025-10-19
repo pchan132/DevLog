@@ -16,7 +16,7 @@ interface FormCreateProjectProps {
 export default function FormCreateProject({
   initialData,
   isEdit = false,
-  projectId
+  projectId,
 }: FormCreateProjectProps) {
   const router = useRouter();
   const [title, setTitle] = useState("");
@@ -39,7 +39,7 @@ export default function FormCreateProject({
     try {
       const url = isEdit ? `/api/projects/${projectId}` : "/api/projects";
       const method = isEdit ? "PUT" : "POST";
-      
+
       const response = await fetch(url, {
         method,
         headers: {
@@ -49,7 +49,9 @@ export default function FormCreateProject({
       });
 
       if (response.ok) {
-        alert(isEdit ? "อัปเดตโปรเจคเรียบร้อยแล้ว" : "สร้างโปรเจคเรียบร้อยแล้ว");
+        alert(
+          isEdit ? "อัปเดตโปรเจคเรียบร้อยแล้ว" : "สร้างโปรเจคเรียบร้อยแล้ว"
+        );
         router.push("/projects");
         router.refresh();
       } else {
@@ -57,7 +59,11 @@ export default function FormCreateProject({
         alert(`เกิดข้อผิดพลาด: ${error.error || "ไม่สามารถบันทึกโปรเจคได้"}`);
       }
     } catch (error) {
-      alert(`เกิดข้อผิดพลาด: ${error instanceof Error ? error.message : "ไม่สามารถบันทึกโปรเจคได้"}`);
+      alert(
+        `เกิดข้อผิดพลาด: ${
+          error instanceof Error ? error.message : "ไม่สามารถบันทึกโปรเจคได้"
+        }`
+      );
     } finally {
       setLoading(false);
     }
@@ -78,9 +84,9 @@ export default function FormCreateProject({
           required
         />
       </div>
-      
+
       <div>
-        <label htmlFor="description" className="block text-sm font-medium mb-1">
+        <label htmlFor="description" className="block text-xl font-medium mb-1">
           รายละเอียด
         </label>
         <textarea
@@ -93,7 +99,7 @@ export default function FormCreateProject({
 
       {isEdit && (
         <div>
-          <label htmlFor="status" className="block text-sm font-medium mb-1">
+          <label htmlFor="status" className="block text-xl font-medium mb-1">
             สถานะ
           </label>
           <select
@@ -114,7 +120,7 @@ export default function FormCreateProject({
         className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 disabled:opacity-50"
         disabled={loading}
       >
-        {loading ? "กำลังบันทึก..." : (isEdit ? "อัปเดตโปรเจค" : "สร้างโปรเจค")}
+        {loading ? "กำลังบันทึก..." : isEdit ? "อัปเดตโปรเจค" : "สร้างโปรเจค"}
       </button>
     </form>
   );

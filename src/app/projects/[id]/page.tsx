@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { notFound, redirect } from "next/navigation";
+import ProjectPageClient from "./ProjectPageClient";
 
 export default async function ProjectPage({
   params,
@@ -20,7 +21,13 @@ export default async function ProjectPage({
       userId: session.user.id,
     },
     include: {
-      systems: true,
+      systems: {
+        include: {
+          notes: {
+            select: { id: true },
+          },
+        },
+      },
     },
   });
 
@@ -28,5 +35,5 @@ export default async function ProjectPage({
     notFound();
   }
 
-  return <div></div>;
+  return <ProjectPageClient project={project} />;
 }
