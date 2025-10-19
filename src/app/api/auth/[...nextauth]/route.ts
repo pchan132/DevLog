@@ -99,7 +99,7 @@ const handler = NextAuth({
   },
   //------------------------------------
   pages: {
-    signIn: "/auth/signin",
+    signIn: "/dashboard",
   },
   //------------------------------------
   secret: process.env.NEXTAUTH_SECRET,

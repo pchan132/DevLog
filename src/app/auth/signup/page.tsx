@@ -1,10 +1,10 @@
 "use client";
 
-import AuthForm from "@/app/components/AuthForm";
+import AuthForm from "@/components/AuthForm";
 import { useRouter } from "next/navigation";
 
 export default function SignUp() {
-  const localApi = "http://localhost:3000/";
+  const localApi = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000/";
   const baseApi = "api/auth/signup";
   const router = useRouter();
 
@@ -17,7 +17,7 @@ export default function SignUp() {
       body: JSON.stringify(data),
     }).then((res) => {
       if (res.ok) {
-        router.push("/profile");
+        router.push("/dashboard");
       }
     });
   };

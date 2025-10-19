@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 
@@ -16,8 +16,8 @@ export default function Profile() {
     }
   }, [status, router]);
 
-  console.log("session: ", session);
-  console.log("status: ", status);
+  // console.log("session: ", session);
+  // console.log("status: ", status);
 
   return (
     <div className="flex h-screen justify-center items-center">

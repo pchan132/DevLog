@@ -3,8 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import { getServerSession } from "next-auth";
-import SessionProvider from "@/app/components/SessionProviders";
-
+import SessionProvider from "@/components/SessionProviders";
+import { ThemeProvider } from "@/components/provider/theme-provider";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -28,9 +28,16 @@ export default async function RootLayout({
   const session = await getServerSession();
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body>
-        <SessionProvider session={session}>{children}</SessionProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <SessionProvider session={session}>{children}</SessionProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

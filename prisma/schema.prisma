@@ -50,6 +50,7 @@ model Project {
   description String?
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
+  status    String // todo || Doing || DONE
   systems   System[]
   createdAt DateTime @default(now())
 }
