@@ -88,6 +88,8 @@ export async function POST(req: Request) {
         userId: session.user.id, // ✅ เพิ่มตรงนี้
       },
     });
+
+    return NextResponse.json(newProject, { status: 201 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
