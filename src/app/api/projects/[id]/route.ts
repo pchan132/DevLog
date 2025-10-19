@@ -1,77 +1,134 @@
-import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth";
 
-// READ project เดียว
-export async function GET(_: Request, { params }: { params: { id: string } }) {
+export async function GET(
+  _req: Request,
+  { params }: { params: { id: string } }
+) {
+  const { id } = params;
+  
   try {
-    const project = await prisma.project.findUnique({
-      where: {
-        id: params.id,
-      },
-      include: {
-        systems: true,
-      },
-    });
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
+    const project = await prisma.project.findFirst({
+      where: {
+        id,
+        userId: session.user.id
+      },
+      include: { systems: true },
+    });
+    
+    if (!project)
+      return NextResponse.json({ error: "Project not found" }, { status: 404 });
     return NextResponse.json(project);
   } catch (error) {
-    console.error("Error fetching project:", error);
+    console.error(error);
     return NextResponse.json(
       {
         error: "Failed to fetch project",
-        details:
-          error instanceof Error ? error.message : "Unknown error Get Project",
       },
       { status: 500 }
     );
   }
 }
 
-// UPDATE project
+// ===============================
+// UPDATE project ตาม id
+// ===============================
 export async function PUT(
   req: Request,
-  { params }: { params: { id: string } }
+  {
+    params,
+  }: {
+    params: { id: string };
+  }
 ) {
+  const { id } = params;
+  
   try {
-    const { title, description } = await req.json();
-    // ทำการอัปเดทข้อมูล
-    const update = await prisma.project.update({
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // ตรวจสอบว่าผู้ใช้เป็นเจ้าของ project หรือไม่
+    const existingProject = await prisma.project.findFirst({
       where: {
-        id: params.id,
+        id,
+        userId: session.user.id
       },
+    });
+    
+    if (!existingProject) {
+      return NextResponse.json({ error: "Project not found" }, { status: 404 });
+    }
+
+    const body = await req.json();
+    const updated = await prisma.project.update({
+      where: { id },
       data: {
-        title,
-        description,
+        title: body.title,
+        description: body.description ?? null,
+        status: body.status,
       },
     });
 
-    return NextResponse.json(update);
+    return NextResponse.json(updated);
   } catch (error) {
-    console.error("Error updating project:", error);
-    return NextResponse.json({
-      error: "Error updating project",
-      detail:
-        error instanceof Error ? error.message : "Unknown error Update Project",
-    });
+    console.error(error);
+    return NextResponse.json(
+      {
+        error: "Failed to update project",
+      },
+      { status: 500 }
+    );
   }
 }
 
-// DELETE project
+// ===============================
+// DELETE project ตาม id
+// ===============================
 export async function DELETE(
-  _: Request,
+  _req: Request,
   { params }: { params: { id: string } }
 ) {
+  const { id } = params;
+  
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // ตรวจสอบว่าผู้ใช้เป็นเจ้าของ project หรือไม่
+    const existingProject = await prisma.project.findFirst({
+      where: {
+        id,
+        userId: session.user.id
+      },
+    });
+    
+    if (!existingProject) {
+      return NextResponse.json({ error: "Project not found" }, { status: 404 });
+    }
+
     await prisma.project.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ message: "Project deleted" });
   } catch (error) {
-    return NextResponse.json({
-      error: "Error Delete Project",
-      detail:
-        error instanceof Error ? error.message : "Unknown error Delete Project",
-    });
+    console.error(error);
+    return NextResponse.json(
+      {
+        error: "Failed to delete project",
+      },
+      { status: 500 }
+    );
   }
 }

@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth";
 
 // READ one note
 export async function GET(
@@ -7,9 +9,19 @@ export async function GET(
   { params }: { params: { noteId: string } }
 ) {
   try {
-    const note = await prisma.note.findUnique({
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const note = await prisma.note.findFirst({
       where: {
         id: params.noteId,
+        system: {
+          project: {
+            userId: session.user.id,
+          },
+        },
       },
       include: {
         system: {
@@ -45,6 +57,11 @@ export async function PUT(
   { params }: { params: { noteId: string } }
 ) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { content, type } = await req.json();
 
     // ตรวจสอบว่ามีข้อมูลที่จะอัพเดทหรือไม่
@@ -55,9 +72,16 @@ export async function PUT(
       );
     }
 
-    // ตรวจสอบว่า note มีอยู่จริง
-    const existingNote = await prisma.note.findUnique({
-      where: { id: params.noteId },
+    // ตรวจสอบว่า note มีอยู่จริงและผู้ใช้เป็นเจ้าของ
+    const existingNote = await prisma.note.findFirst({
+      where: {
+        id: params.noteId,
+        system: {
+          project: {
+            userId: session.user.id,
+          },
+        },
+      },
     });
 
     if (!existingNote) {
@@ -110,9 +134,21 @@ export async function DELETE(
   { params }: { params: { noteId: string } }
 ) {
   try {
-    // ตรวจสอบว่า note มีอยู่จริงก่อนลบ
-    const existingNote = await prisma.note.findUnique({
-      where: { id: params.noteId },
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // ตรวจสอบว่า note มีอยู่จริงและผู้ใช้เป็นเจ้าของก่อนลบ
+    const existingNote = await prisma.note.findFirst({
+      where: {
+        id: params.noteId,
+        system: {
+          project: {
+            userId: session.user.id,
+          },
+        },
+      },
       select: { id: true, content: true },
     });
 
