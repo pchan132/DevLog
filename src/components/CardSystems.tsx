@@ -30,8 +30,10 @@ export default function CardSystems({ system }: CardSystemsProps) {
     <Card className="h-full flex flex-col hover:shadow-md transition-shadow duration-200">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Settings className="h-5 w-5 text-blue-500" />
-          {system.title}
+          <Settings className="h-5 w-5 text-blue-500 " />
+          <span className="max-w-[150px] sm:max-w-[200px] truncate">
+            {system.title}
+          </span>
         </CardTitle>
         <CardDescription className="line-clamp-2">
           {system.description || "ไม่มีคำอธิบาย"}

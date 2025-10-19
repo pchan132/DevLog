@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowLeft, PlusCircle } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import TabProject from "@/components/TabProject";
 import CardSystems from "@/components/CardSystems";
 import CardNotes from "@/components/CardNotes";
 import Flowchart from "@/components/Flowchart";
+import ButtonSystem from "@/components/ButtonSystem";
 
 interface System {
   id: string;
@@ -91,13 +92,7 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
         <div className="mt-6">
           {activeTab === "features" && (
             <>
-              <div className="flex justify-between items-center">
-                <span>ฟีเจอร์/ระบบในโปรเจคนี้</span>
-                <button className="flex gap-2 border rounded-2xl cursor-pointer p-2">
-                  <PlusCircle />
-                  เพิ่มฟิเจอร์
-                </button>
-              </div>{" "}
+              <ButtonSystem projectId={project.id} />
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {project.systems.map((system) => (
                   <CardSystems key={system.id} system={system} />
