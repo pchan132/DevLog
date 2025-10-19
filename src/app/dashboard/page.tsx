@@ -11,32 +11,32 @@ async function getStats() {
   return res.json();
 }
 
-export default async function Dashborad() {
-  const stats = await getStats(); // เอาฟังก์ชั่น เรียก API มากใช้
+const stats = await getStats(); // เอาฟังก์ชั่น เรียก API มากใช้
 
+export default async function Dashboard() {
   // ข้อมูลที่จะใส่ใน Card -------------------------------
   const cards = [
     {
       title: "โปรเจคทั้งหมด",
-      value: stats.projects,
+      value: stats.projectCount,
       icon: <Folder className="text-blue-500" />,
       color: "bg-blue-100",
     },
     {
       title: "ฟีเจอร์ทั้งหมด",
-      value: stats.features,
+      value: stats.systemCount,
       icon: <Settings className="text-green-500" />,
       color: "bg-green-100",
     },
     {
       title: "โน้ตทั้งหมด",
-      value: stats.notes,
+      value: stats.notesCount,
       icon: <StickyNote className="text-yellow-500" />,
       color: "bg-yellow-100",
     },
     {
       title: "สำเร็จแล้ว",
-      value: stats.completed,
+      value: stats.completedCount,
       icon: <CheckCircle className="text-purple-500" />,
       color: "bg-purple-100",
     },

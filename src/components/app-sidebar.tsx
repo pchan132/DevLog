@@ -14,6 +14,7 @@ import {
   SquareTerminal,
 } from "lucide-react";
 
+import { NavMain } from "@/components/nav-main";
 import { NavProjects } from "@/components/nav-projects";
 import { NavUser } from "@/components/nav-user";
 import { TeamSwitcher } from "@/components/team-switcher";
@@ -24,14 +25,10 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { Item } from "@radix-ui/react-dropdown-menu";
 
 // This is sample data.
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   teams: [
     {
       name: "Acme Inc",
@@ -90,9 +87,6 @@ const data = {
       ],
     },
     {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
       items: [
         {
           title: "Introduction",
@@ -155,6 +149,15 @@ const data = {
   ],
 };
 
+const dataItems = {
+  Items: [
+    { title: "แดชบอร์ด", url: "/dashboard" },
+    { title: "โปรเจค", url: "/projects" },
+    { title: "ฟีเจอร์/ระบบ", url: "/system" },
+    { title: "โน้ต", url: "/notes" },
+  ],
+};
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -162,11 +165,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
-        {/* manu */}
-        <NavProjects />
+        <NavMain items={dataItems.Items} />
+        {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
       <SidebarFooter>
-        {/* Profile */}
         <NavUser />
       </SidebarFooter>
       <SidebarRail />
