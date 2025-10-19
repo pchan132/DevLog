@@ -28,7 +28,7 @@ export default async function ProjectsPage() {
   return (
     <div className="bg-card text-card-foreground gap-6 rounded-xl py-6 px-4 shadow-sm">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold mb-4">โปรเจกต์ของคุณ</h1>
+        <h1 className="text-2xl font-bold mb-4">โปรเจคของคุณ</h1>
         <a
           href="/projects/create"
           className="flex justify-center items-center bg-background border border-foreground p-2 rounded-lg"
