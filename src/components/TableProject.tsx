@@ -93,14 +93,18 @@ export default function TableProject({ projects }: TableProjectProps) {
       <TableBody>
         {projects.map((project) => (
           <TableRow key={project.id}>
-            <TableCell className="font-medium flex items-center">
+            <TableCell className="flex items-center">
               <Folder className="mx-2 my-3 inline-block items-center " />
-              <div>
-                {project.title}
-                <p className="text-sm text-gray-300">${project.description}</p>
+              <div className="flex flex-col">
+                <span className="font-medium text-lg sm:max-w-[200px] max-w-[100px] truncate">
+                  {project.title}
+                </span>
+                <p className="text-sm text-gray-300 max-w-[100px] truncate">
+                  {project.description}
+                </p>
               </div>
             </TableCell>
-            <TableCell className="font-medium">
+            <TableCell>
               <span
                 className={`text-sm text-foreground rounded-full px-2 py-1 shadow-md ${
                   project.status === "TODO"
@@ -108,7 +112,7 @@ export default function TableProject({ projects }: TableProjectProps) {
                     : project.status === "DOING"
                     ? "bg-yellow-200"
                     : "bg-gray-200"
-                }`}
+                } text-xs`}
               >
                 {project.status}
               </span>
