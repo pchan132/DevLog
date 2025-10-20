@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 import TabProject from "@/components/TabProject";
 import CardSystems from "@/components/CardSystems";
 import CardNotes from "@/components/CardNotes";
@@ -12,7 +13,8 @@ interface System {
   id: string;
   title: string;
   description?: string | null;
-  notes: { id: string }[];
+  status: string;
+  notes: { id: string; content: string; type: string }[];
   createdAt: Date;
   flowData?: any;
   projectId: string;
@@ -32,6 +34,7 @@ interface ProjectPageClientProps {
 }
 
 const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("features");
 
   // รวบรวมโน้ตทั้งหมดจากระบบทั้งหมด
@@ -69,10 +72,10 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
               <span
                 className={`text-xs px-2 py-1 rounded-full ${
                   project.status === "DONE"
-                    ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400"
+                    ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-white"
                     : project.status === "DOING"
-                    ? "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400"
-                    : "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400"
+                    ? "bg-blue-100 text-blue-800 dark:bg-blue-400 dark:text-white"
+                    : "bg-red-600 text-white dark:bg-red-600 dark:text-white"
                 }`}
               >
                 {project.status === "DONE"
@@ -92,7 +95,11 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
         <div className="mt-6">
           {activeTab === "features" && (
             <>
-              <ButtonSystem projectId={project.id} />
+              {/* กดปุ่ม เพิ่มฟิเจอร์ และส่ง projectId ไป */}
+              <ButtonSystem
+                projectId={project.id}
+                onSystemCreated={() => router.refresh()}
+              />
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {project.systems.map((system) => (
                   <CardSystems key={system.id} system={system} />
