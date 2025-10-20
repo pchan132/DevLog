@@ -1,5 +1,4 @@
-import React from "react";
-import Link from "next/link";
+"use client";
 import {
   CardHeader,
   CardFooter,
@@ -8,8 +7,21 @@ import {
   CardContent,
   Card,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import { Button } from "./ui/button";
 import { Settings, StickyNote } from "lucide-react";
+import { useState, useEffect } from "react";
+
+import ViewSystem from "./ViewSystem";
 
 interface System {
   id: string;
@@ -26,6 +38,12 @@ interface CardSystemsProps {
 }
 
 export default function CardSystems({ system }: CardSystemsProps) {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   return (
     <Card className="h-full flex flex-col hover:shadow-md transition-shadow duration-200">
       <CardHeader>
@@ -46,11 +64,22 @@ export default function CardSystems({ system }: CardSystemsProps) {
         </div>
       </CardContent>
       <CardFooter className="pt-4">
-        <Link href={`/systems/${system.id}`} className="w-full">
-          <Button variant="outline" className="w-full">
-            ดูรายละเอียด
-          </Button>
-        </Link>
+        {isMounted && (
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="w-full">ดูรายละเอียด</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>รายละเอียดฟังก์ชั่น</DialogTitle>
+                <DialogDescription>
+                  แสดงรายละเอียดเกี่ยวกับฟังก์ชั่นและความสามารถของระบบนี้
+                </DialogDescription>
+              </DialogHeader>
+              <ViewSystem systemData={system} />
+            </DialogContent>
+          </Dialog>
+        )}
       </CardFooter>
     </Card>
   );

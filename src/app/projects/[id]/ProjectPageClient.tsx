@@ -71,10 +71,10 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
               <span
                 className={`text-xs px-2 py-1 rounded-full ${
                   project.status === "DONE"
-                    ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400"
+                    ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-white"
                     : project.status === "DOING"
-                    ? "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400"
-                    : "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400"
+                    ? "bg-blue-100 text-blue-800 dark:bg-blue-400 dark:text-white"
+                    : "bg-red-600 text-white dark:bg-red-600 dark:text-white"
                 }`}
               >
                 {project.status === "DONE"
