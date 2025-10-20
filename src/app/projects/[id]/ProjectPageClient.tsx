@@ -13,7 +13,8 @@ interface System {
   id: string;
   title: string;
   description?: string | null;
-  notes: { id: string }[];
+  status: string;
+  notes: { id: string; content: string; type: string }[];
   createdAt: Date;
   flowData?: any;
   projectId: string;

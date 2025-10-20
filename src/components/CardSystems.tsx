@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/dialog";
 
 import { Button } from "./ui/button";
-import { Settings, StickyNote } from "lucide-react";
+import { Settings, StickyNote, CheckCircle, Circle, PlayCircle } from "lucide-react";
 import { useState, useEffect } from "react";
 
 import ViewSystem from "./ViewSystem";
@@ -27,7 +27,8 @@ interface System {
   id: string;
   title: string;
   description?: string | null;
-  notes: { id: string }[];
+  status: string;
+  notes: { id: string; content: string; type: string }[];
   createdAt: Date;
   flowData?: any;
   projectId: string;
@@ -58,9 +59,38 @@ export default function CardSystems({ system }: CardSystemsProps) {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-1">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <StickyNote className="h-4 w-4" />
-          <span>{system.notes.length} โน้ต</span>
+        <div className="space-y-3">
+          {/* Status */}
+          <div className="flex items-center gap-2">
+            {system.status === "DONE" ? (
+              <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
+            ) : system.status === "DOING" ? (
+              <PlayCircle className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+            ) : (
+              <Circle className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+            )}
+            <span
+              className={`text-xs px-2 py-1 rounded-full ${
+                system.status === "DONE"
+                  ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400"
+                  : system.status === "DOING"
+                  ? "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400"
+                  : "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400"
+              }`}
+            >
+              {system.status === "DONE"
+                ? "สำเร็จ"
+                : system.status === "DOING"
+                ? "กำลังทำ"
+                : "ยังไม่ได้ทำ"}
+            </span>
+          </div>
+          
+          {/* Notes Count */}
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <StickyNote className="h-4 w-4" />
+            <span>{system.notes.length} โน้ต</span>
+          </div>
         </div>
       </CardContent>
       <CardFooter className="pt-4">
