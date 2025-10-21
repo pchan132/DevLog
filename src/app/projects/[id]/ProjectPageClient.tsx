@@ -102,7 +102,11 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
               />
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {project.systems.map((system) => (
-                  <CardSystems key={system.id} system={system} />
+                  <CardSystems
+                    key={system.id}
+                    system={system}
+                    onSystemUpdated={() => router.refresh()} // ส่งฟังก์ชันรีเฟรชให้ CardSystems
+                  />
                 ))}
                 {project.systems.length === 0 && (
                   <div className="col-span-full text-center py-8 text-muted-foreground">

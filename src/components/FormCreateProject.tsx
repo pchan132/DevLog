@@ -1,4 +1,5 @@
 "use client";
+// From CREATE and EDIT project
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -108,9 +109,15 @@ export default function FormCreateProject({
             onChange={(e) => setStatus(e.target.value)}
             className="w-full p-2 border rounded-md"
           >
-            <option value="TODO">TODO</option>
-            <option value="DOING">DOING</option>
-            <option value="DONE">DONE</option>
+            <option value="TODO" className="bg-black text-white">
+              TODO
+            </option>
+            <option value="DOING" className="bg-black text-white">
+              DOING
+            </option>
+            <option value="DONE" className="bg-black text-white">
+              DONE
+            </option>
           </select>
         </div>
       )}

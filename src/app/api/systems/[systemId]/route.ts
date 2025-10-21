@@ -68,7 +68,7 @@ export async function PUT(
       return NextResponse.json({ error: "System not found" }, { status: 404 });
     }
 
-    const { title, description, flowData } = await req.json();
+    const { title, description, status, flowData } = await req.json();
     const updatedSystem = await prisma.system.update({
       where: {
         id: params.systemId,
@@ -76,6 +76,7 @@ export async function PUT(
       data: {
         title,
         description,
+        status,
         flowData,
       },
     });
