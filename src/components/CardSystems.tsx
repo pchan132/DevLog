@@ -19,6 +19,7 @@ import {
 
 import ButtonDelete from "./ButtonDelete";
 import ButtonEdit from "./ButtonEdit";
+import ButtonNewNote from "./ButtonNewNote";
 import { Button } from "./ui/button";
 import {
   Settings,
@@ -44,9 +45,13 @@ interface System {
 
 interface CardSystemsProps {
   system: System;
+  onSystemUpdated?: () => void; // ฟังก์ชันที่จะถูกเรียกเมื่อแก้ไข system สำเร็จ
 }
 
-export default function CardSystems({ system }: CardSystemsProps) {
+export default function CardSystems({
+  system,
+  onSystemUpdated,
+}: CardSystemsProps) {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -71,10 +76,15 @@ export default function CardSystems({ system }: CardSystemsProps) {
           </div>
           <div className="flex gap-2">
             {/* ปุ่มเพิ่ม โน๊ต */}
-            {/* ปุ่ม Edit */}
-            <ButtonEdit id={system.id} />
+            <ButtonNewNote />
+            {/* ปุ่ม Edit - ส่งข้อมูลทั้งหมดที่ต้องการให้ปุ่มแก้ไข */}
+            <ButtonEdit
+              systemId={system.id} // ส่ง ID ของ system
+              projectId={system.projectId} // ส่ง ID ของ project
+              onSystemUpdated={onSystemUpdated} // ส่งฟังก์ชันสำหรับรีเฟรช
+            />
             {/* ปุ่ม Delete */}
-            <ButtonDelete id={system.id} />
+            <ButtonDelete id={system.id} typeButton="system" />
           </div>
         </div>
       </CardHeader>

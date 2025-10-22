@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     }
 
     const { content, type, systemId } = await req.json();
-    
+
     // ตรวจสอบว่าผู้ใช้เป็นเจ้าของ system หรือไม่
     const system = await prisma.system.findFirst({
       where: {
@@ -24,12 +24,23 @@ export async function POST(req: Request) {
     });
 
     if (!system) {
-      return NextResponse.json({ error: "System not found or access denied" }, { status: 404 });
+      return NextResponse.json(
+        { error: "System not found or access denied" },
+        { status: 404 }
+      );
+    }
+
+    // ตรวจสอบว่า content เป็น JSON object
+    if (typeof content !== "object") {
+      return NextResponse.json(
+        { error: "Invalid content format" },
+        { status: 400 }
+      );
     }
 
     const newNote = await prisma.note.create({
       data: {
-        content,
+        content, // ✅ Prisma รองรับ Json โดยตรง
         type,
         systemId,
       },

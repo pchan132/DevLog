@@ -22,6 +22,7 @@ export default function ButtonSystem({
 }: ButtonSystemProps) {
   const [open, setOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [systemData, setSystemData] = useState(null);
 
   useEffect(() => {
     setIsMounted(true);
@@ -54,6 +55,7 @@ export default function ButtonSystem({
             </DialogHeader>
             <FormCreateSystem
               projectId={projectId}
+              // initialData={}
               onSuccess={handleSystemCreated}
             />
           </DialogContent>
