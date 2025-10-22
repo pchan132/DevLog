@@ -64,6 +64,14 @@ export async function PUT(
 
     const { content, type } = await req.json();
 
+    // ตรวจสอบว่า content เป็น JSON object
+    if (typeof content !== "object") {
+      return NextResponse.json(
+        { error: "Invalid content format" },
+        { status: 400 }
+      );
+    }
+
     // ตรวจสอบว่ามีข้อมูลที่จะอัพเดทหรือไม่
     if (!content && !type) {
       return NextResponse.json(
