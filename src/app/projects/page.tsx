@@ -1,4 +1,4 @@
-// UI Components
+// UI Components Server
 import TableProject from "@/components/TableProject";
 
 // ข้อมูล และ session

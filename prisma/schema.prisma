@@ -69,6 +69,7 @@ model System {
 
 model Note {
   id        String  @id @default(cuid())
+  title     String
   content   Json     // ✅ เปลี่ยนเป็น Json เพื่อใช้ Tiptab
   type      String  // "problem" | "solution" | "learning"
   system    System  @relation(fields: [systemId], references: [id], onDelete: Cascade)

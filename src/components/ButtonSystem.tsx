@@ -22,7 +22,7 @@ export default function ButtonSystem({
 }: ButtonSystemProps) {
   const [open, setOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const [systemData, setSystemData] = useState(null);
+  // const [systemData, setSystemData] = useState(null);
 
   useEffect(() => {
     setIsMounted(true);

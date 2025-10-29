@@ -19,7 +19,7 @@ import {
 
 import ButtonDelete from "./ButtonDelete";
 import ButtonEdit from "./ButtonEdit";
-import ButtonNewNote from "./ButtonNewNote";
+import ButtonlistNote from "./ButtonlistNote";
 import { Button } from "./ui/button";
 import {
   Settings,
@@ -76,7 +76,7 @@ export default function CardSystems({
           </div>
           <div className="flex gap-2">
             {/* ปุ่มเพิ่ม โน๊ต */}
-            <ButtonNewNote />
+            <ButtonlistNote systemId={system.id} />
             {/* ปุ่ม Edit - ส่งข้อมูลทั้งหมดที่ต้องการให้ปุ่มแก้ไข */}
             <ButtonEdit
               systemId={system.id} // ส่ง ID ของ system
