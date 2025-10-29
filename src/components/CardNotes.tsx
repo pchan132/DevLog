@@ -26,7 +26,11 @@ interface CardNotesProps {
   systemTitle: string;
 }
 
-export default function CardNotes({ noteId, systemId, systemTitle }: CardNotesProps) {
+export default function CardNotes({
+  noteId,
+  systemId,
+  systemTitle,
+}: CardNotesProps) {
   const [note, setNote] = useState<Note | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -36,7 +40,7 @@ export default function CardNotes({ noteId, systemId, systemTitle }: CardNotesPr
         const response = await fetch(`/api/notes/${noteId}`);
         if (response.ok) {
           const data = await response.json();
-          setNote(data);
+          setNote(data); // ข้อมูล notes
         }
       } catch (error) {
         console.error("Error fetching note:", error);

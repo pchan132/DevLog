@@ -62,7 +62,7 @@ export async function PUT(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { content, type } = await req.json();
+    const { title, content, type } = await req.json();
 
     // ตรวจสอบว่า content เป็น JSON object
     if (typeof content !== "object") {
@@ -109,6 +109,7 @@ export async function PUT(
         id: params.noteId,
       },
       data: {
+        ...(title && { title }),
         ...(content && { content }),
         ...(type && { type }),
       },

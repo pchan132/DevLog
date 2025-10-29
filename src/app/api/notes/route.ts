@@ -11,7 +11,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { content, type, systemId } = await req.json();
+    const { title, content, type, systemId } = await req.json();
 
     // ตรวจสอบว่าผู้ใช้เป็นเจ้าของ system หรือไม่
     const system = await prisma.system.findFirst({
@@ -40,6 +40,7 @@ export async function POST(req: Request) {
 
     const newNote = await prisma.note.create({
       data: {
+        title,
         content, // ✅ Prisma รองรับ Json โดยตรง
         type,
         systemId,
