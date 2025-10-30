@@ -52,13 +52,20 @@ export default function ButtonlistNote({
           <DialogContent className="">
             <DialogHeader>
               <div className="flex justify-between">
-                <DialogTitle>โน็ต</DialogTitle>
+                <DialogTitle className="flex flex-col">
+                  <span className="text-start">โน็ต</span>
+                  <DialogDescription>
+                    โน็ตทั้งหมดของ ฟีเจอร์นี้
+                  </DialogDescription>
+                </DialogTitle>
 
-                <div className="flex gap-2 border rounded-2xl cursor-pointer p-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors mr-3">
+                <a
+                  href="/notes/createNote"
+                  className="flex gap-2 border rounded-2xl cursor-pointer p-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors mr-3"
+                >
                   เพิ่มโน็ต
-                </div>
+                </a>
               </div>
-              <DialogDescription>โน็ตทั้งหมดของ ฟีเจอร์นี้</DialogDescription>
             </DialogHeader>
             <TableNote></TableNote>
           </DialogContent>
