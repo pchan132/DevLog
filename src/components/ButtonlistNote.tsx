@@ -2,6 +2,7 @@
 import { NotebookPen } from "lucide-react";
 import { useState, useEffect } from "react";
 
+import Link from "next/link";
 import TableNote from "./TableNote";
 
 import {
@@ -59,12 +60,12 @@ export default function ButtonlistNote({
                   </DialogDescription>
                 </DialogTitle>
 
-                <a
-                  href="/notes/createNote"
+                <Link
+                  href="/note"
                   className="flex gap-2 border rounded-2xl cursor-pointer p-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors mr-3"
                 >
                   เพิ่มโน็ต
-                </a>
+                </Link>
               </div>
             </DialogHeader>
             <TableNote></TableNote>

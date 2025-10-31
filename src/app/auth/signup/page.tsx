@@ -4,7 +4,10 @@ import AuthForm from "@/components/AuthForm";
 import { useRouter } from "next/navigation";
 
 export default function SignUp() {
-  const localApi = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000/";
+  const localApi =
+    process.env.NEXT_PUBLIC_BASE_URL ||
+    "http://localhost:3000/" ||
+    "https://semianthropologic-innocuously-tamisha.ngrok-free.dev";
   const baseApi = "api/auth/signup";
   const router = useRouter();
 
